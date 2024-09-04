@@ -184,4 +184,4 @@ if __name__ == "__main__":
             st.session_state.updated = False
         revise_words(words, st.session_state.word_scores)
 
-    st.write(f"Score: {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
+    st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
