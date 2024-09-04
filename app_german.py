@@ -134,7 +134,7 @@ if __name__ == "__main__":
     st.write("")
 
     # Ajouter une image
-    st.image("pic3.png", width=400)
+    st.image("img.png", width=400)
 
     # Ajouter un espace
     st.write("")
