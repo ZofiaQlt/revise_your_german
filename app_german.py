@@ -113,7 +113,7 @@ def revise_words(words_dict, word_scores):
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
-        st.experimental_rerun()  # Recharge la page pour afficher la nouvelle question
+        st.rerun()  # Recharge la page pour afficher la nouvelle question
 
 if __name__ == "__main__":
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
