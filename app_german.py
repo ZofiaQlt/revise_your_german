@@ -140,7 +140,7 @@ if __name__ == "__main__":
         if st.button("Commencer la révision"):
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-            st.experimental_rerun()  # Recharge la page pour commencer la révision
+            st.rerun()  # Recharge la page pour commencer la révision
     elif st.session_state.revision_direction is None:
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2, col3 = st.columns(3)
@@ -148,17 +148,17 @@ if __name__ == "__main__":
             if st.button("___Français -> Allemand___", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.experimental_rerun()
+                st.rerun()
         with col2:
             if st.button("___Allemand -> Français___", key='german_to_french'):
                 st.session_state.revision_direction = 'german_to_french'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.experimental_rerun()
+                st.rerun()
         with col3:
             if st.button("___Révision mixte___", key='mixed'):
                 st.session_state.revision_direction = 'mixed'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.experimental_rerun()
+                st.rerun()
     else:
         revise_words(words, st.session_state.word_scores)
 
