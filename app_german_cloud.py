@@ -115,17 +115,17 @@ def display_buttons():
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("Réviser de français vers allemand", key="french_to_german"):
+        if st.button("___Français -> Allemand___", key="french_to_german"):
             st.session_state.revision_direction = 'french_to_german'
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.session_state.updated = True
     with col2:
-        if st.button("Réviser d'allemand vers français", key="german_to_french"):
+        if st.button("___Allemand -> Français___", key="german_to_french"):
             st.session_state.revision_direction = 'german_to_french'
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.session_state.updated = True
     with col3:
-        if st.button("Révision mixte", key="mixed"):
+        if st.button("___Révision mixte___", key="mixed"):
             st.session_state.revision_direction = 'mixed'
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.session_state.updated = True
