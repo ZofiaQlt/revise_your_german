@@ -2,7 +2,7 @@ import streamlit as st
 import random
 import time
 
-# Exemple de dictionnaire de mots (tu peux remplacer par ta liste de 3000 mots)
+# Dictionnaire de mots
 words = {
     "Das Haus": "La maison",
     "Der Baum": "L'arbre",
@@ -43,7 +43,6 @@ words = {
     "Äusserst": "Extrêmement",
     "Nützen": "Servir, être utile, profiter à qn",
     "Die Lohnerhöhung": "L'augmentation de salaire"
-    # Ajoute ici les autres mots (jusqu'à 3000 mots)
 }
 
 # Initialisation des scores des mots et autres variables
@@ -113,26 +112,6 @@ def revise_words(words_dict, word_scores):
         st.session_state.current_word = get_weighted_word(word_scores)
 
 def display_buttons():
-    """Affiche les boutons de sélection de révision avec des couleurs personnalisées."""
-    st.markdown("""
-    <style>
-    .button {
-        background-color: #FFFF00; /* Jaune */
-        color: black;
-        border: 1px solid black;
-        border-radius: 5px;
-        padding: 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-    }
-    .button:hover {
-        background-color: #FFFF99; /* Jaune clair au survol */
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -155,13 +134,13 @@ if __name__ == "__main__":
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
 
     # Ajouter un espace
-    st.write("")  # Ligne vide pour ajouter de l'espace
+    st.write("") 
 
-    # Ajouter une image de fond ou un en-tête
-    st.image("img.png", width=400)  # Remplacez par une image de votre choix
+    # Ajouter une image
+    st.image("img.png", width=400)
 
     # Ajouter un espace
-    st.write("")  # Ligne vide pour ajouter de l'espace
+    st.write("") 
 
     if st.button("Réinitialiser la révision"):
         st.session_state.word_scores = {word: 1 for word in words.keys()}
