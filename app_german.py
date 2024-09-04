@@ -67,7 +67,7 @@ def get_weighted_word(word_scores):
     return random.choice(weighted_list)
 
 def revise_words(words_dict, word_scores):
-    # Choix de la direction de révision
+    # Choix du type de révision
     if st.session_state.revision_direction == 'french_to_german':
         # Révision du français vers l'allemand
         german_word = st.session_state.current_word
