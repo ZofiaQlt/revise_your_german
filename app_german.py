@@ -2,7 +2,7 @@ import streamlit as st
 import random
 import time
 
-# Exemple de dictionnaire de mots (tu peux remplacer par ta liste de 3000 mots)
+# Dictionnaire de mots
 words = {
     "Das Haus": "La maison",
     "Der Baum": "L'arbre",
