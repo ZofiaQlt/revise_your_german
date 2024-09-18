@@ -12,7 +12,7 @@ def load_data():
 # Charger le fichier CSV de vocabulaire
 words = load_data()
 
-# Initialisation des scores des mots et autres variables
+# Initialisation des scores des mots et autres variables dans la session
 if 'word_scores' not in st.session_state:
     st.session_state.word_scores = {word: 1 for word in words.keys()}
 if 'current_word' not in st.session_state:
@@ -34,33 +34,25 @@ def get_weighted_word(word_scores):
     return random.choice(weighted_list)
 
 def revise_words(words_dict, word_scores):
-    # Choix du type de révision
+    # Révision mixte : choix aléatoire du sens (français -> allemand ou allemand -> français)
+    if st.session_state.revision_direction == 'mixed':
+        if random.choice([True, False]):
+            st.session_state.revision_direction = 'french_to_german'
+        else:
+            st.session_state.revision_direction = 'german_to_french'
+
+    # Révision du français vers l'allemand
     if st.session_state.revision_direction == 'french_to_german':
-        # Révision du français vers l'allemand
-        french_translation = st.session_state.current_word
-        german_word = [german for german, french in words_dict.items() if french == french_translation][0]
-        st.write(f"Quel est le mot allemand pour _'{french_translation}'_ ?")
-        correct_answer = german_word
-    elif st.session_state.revision_direction == 'german_to_french':
-        # Révision de l'allemand vers le français
         german_word = st.session_state.current_word
         french_translation = words_dict[german_word]
-        st.write(f"Quel est le mot français pour _'{german_word}'_ ?")
+        st.write(f"Quel est le mot allemand pour _'{french_translation}'_ ?")
+        correct_answer = german_word
+
+    # Révision de l'allemand vers le français
+    elif st.session_state.revision_direction == 'german_to_french':
+        french_translation = words_dict[st.session_state.current_word]
+        st.write(f"Quel est le mot français pour _'{st.session_state.current_word}'_ ?")
         correct_answer = french_translation
-    elif st.session_state.revision_direction == 'mixed':
-        # Révision mixte
-        if random.choice([True, False]):
-            # Révision du français vers l'allemand
-            french_translation = st.session_state.current_word
-            german_word = [german for german, french in words_dict.items() if french == french_translation][0]
-            st.write(f"Quel est le mot allemand pour _'{french_translation}'_ ?")
-            correct_answer = german_word
-        else:
-            # Révision de l'allemand vers le français
-            german_word = st.session_state.current_word
-            french_translation = words_dict[german_word]
-            st.write(f"Quel est le mot français pour _'{german_word}'_ ?")
-            correct_answer = french_translation
 
     # Crée un formulaire pour gérer la soumission via "Enter"
     with st.form(key='my_form', clear_on_submit=True):
@@ -82,7 +74,7 @@ def revise_words(words_dict, word_scores):
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
-        st.rerun()  # Recharge la page pour afficher la nouvelle question
+        st.experimental_rerun()  # Recharge la page pour afficher la nouvelle question
 
 if __name__ == "__main__":
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
@@ -90,14 +82,13 @@ if __name__ == "__main__":
     # Ajouter un espace
     st.write("")
 
-    # Ajouter une image (tu peux adapter l'image ou l'enlever si nécessaire)
+    # Ajouter une image
     st.image("img.png", width=400)
 
     # Ajouter un espace
     st.write("")
 
-    # Réinitialiser la révision
-    if st.button("Réinitialiser la révision"):
+    if st.button("Réinitialiser la révision", key='reset_revision'):
         st.session_state.word_scores = {word: 1 for word in words.keys()}
         st.session_state.start = False
         st.session_state.correct = 0
@@ -105,9 +96,9 @@ if __name__ == "__main__":
         st.session_state.revision_direction = None
         st.write("Révision réinitialisée!")
 
-    # Vérification du démarrage de la révision
+    # Utilisation de la méthode get pour éviter l'erreur KeyError
     if not st.session_state.get('start', False):
-        if st.button("Commencer la révision"):
+        if st.button("Commencer la révision", key='start_revision'):
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.experimental_rerun()  # Recharge la page pour commencer la révision
@@ -118,19 +109,18 @@ if __name__ == "__main__":
             if st.button("Français -> Allemand", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
         with col2:
             if st.button("Allemand -> Français", key='german_to_french'):
                 st.session_state.revision_direction = 'german_to_french'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
         with col3:
-            if st.button("Révision mixte", key='mixed'):
+            if st.button("Révision mixte", key='mixed_revision'):
                 st.session_state.revision_direction = 'mixed'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
     else:
         revise_words(words, st.session_state.word_scores)
 
-    # Affichage du score
     st.write(f"Score: {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
