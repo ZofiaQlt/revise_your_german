@@ -1,49 +1,16 @@
 import streamlit as st
 import random
 import time
+import pandas as pd
 
-# Dictionnaire de mots
-words = {
-    "Das Haus": "La maison",
-    "Der Baum": "L'arbre",
-    "Der Freund": "L'ami",
-    "Das Buch": "Le livre",
-    "Der Hund": "Le chien",
-    "Der Beruf": "La profession",
-    "Das Werk": "L'usine",
-    "Die Stelle": "Le poste",
-    "Schmutzig": "Sale",
-    "Anstrengend": "Fatigant",
-    "Der Lohn": "Le salaire",
-    "Geld verdienen": "Gagner de l'argent",
-    "Sein Brot verdienen": "Gagner sa vie",
-    "Seinen Lebensunterhalt verdienen": "Gagner sa vie",
-    "Die Fähigkeit": "La capacité",
-    "Der Betrieb": "L'entreprise",
-    "Das Unternehmen": "L'entreprise",
-    "Gründen": "Fonder",
-    "Die Arbeitslosigkeit": "Le chômage",
-    "Der Arbeitgeber": "L'employeur",
-    "Der Arbeitnehmer": "Le salarié",
-    "Die Arbeitskräfte": "La main d'oeuvre",
-    "Einen Beruf ausüben": "Exercer un métier",
-    "Jdn beschäftigen": "Employer qn",
-    "Einstellen": "Embaucher",
-    "Der Mitarbeiter": "L'employé",
-    "Der Angestellte": "L'employé",
-    "Jdn entlassen": "Licencier qn",
-    "Vor die Tür setzen": "Mettre à la porte",
-    "Der Bereich": "Le domaine, le secteur",
-    "Häufig": "Souvent, fréquent",
-    "Der Begriff": "Le terme, le concept",
-    "Verwenden": "Utiliser",
-    "Ergänzen": "Compléter, ajouter",
-    "Gering": "Faible, minime",
-    "Passende": "Approprié",
-    "Äusserst": "Extrêmement",
-    "Nützen": "Servir, être utile, profiter à qn",
-    "Die Lohnerhöhung": "L'augmentation de salaire"
-}
+# Charger les données depuis un fichier CSV
+@st.cache_data
+def load_data():
+    data = pd.read_csv("vocabulaire.csv", delimiter=';')
+    return {row['German']: row['French'] for _, row in data.iterrows()}
+
+# Charger le fichier CSV de vocabulaire
+words = load_data()
 
 # Initialisation des scores des mots et autres variables
 if 'word_scores' not in st.session_state:
@@ -113,7 +80,7 @@ def revise_words(words_dict, word_scores):
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
-        st.rerun()  # Recharge la page pour afficher la nouvelle question
+        st.experimental_rerun()  # Recharge la page pour afficher la nouvelle question
 
 if __name__ == "__main__":
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
@@ -140,7 +107,7 @@ if __name__ == "__main__":
         if st.button("Commencer la révision"):
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-            st.rerun()  # Recharge la page pour commencer la révision
+            st.experimental_rerun()  # Recharge la page pour commencer la révision
     elif st.session_state.revision_direction is None:
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2, col3 = st.columns(3)
@@ -148,17 +115,17 @@ if __name__ == "__main__":
             if st.button("___Français -> Allemand___", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
         with col2:
             if st.button("___Allemand -> Français___", key='german_to_french'):
                 st.session_state.revision_direction = 'german_to_french'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
         with col3:
             if st.button("___Révision mixte___", key='mixed'):
                 st.session_state.revision_direction = 'mixed'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-                st.rerun()
+                st.experimental_rerun()
     else:
         revise_words(words, st.session_state.word_scores)
 
