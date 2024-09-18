@@ -120,12 +120,6 @@ if __name__ == "__main__":
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.rerun()  # Recharge la page pour commencer la révision
 
-    # Bouton pour activer le mode "révision des erreurs"
-    elif not st.session_state.error_mode and st.button("___🧠 Réviser uniquement les erreurs fréquentes___"):
-        st.session_state.error_mode = True
-        st.session_state.revision_direction = 'mixed'  # Révision mixte par défaut
-        st.rerun()
-
     elif st.session_state.revision_direction is None:
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2, col3 = st.columns(3)
@@ -144,6 +138,12 @@ if __name__ == "__main__":
                 st.session_state.revision_direction = 'mixed'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
                 st.rerun()
+    # Bouton pour activer le mode "révision des erreurs"
+    elif not st.session_state.error_mode and st.button("___🧠 Réviser uniquement les erreurs fréquentes___"):
+        st.session_state.error_mode = True
+        st.session_state.revision_direction = 'mixed'  # Révision mixte par défaut
+        st.rerun()
+        
     else:
         revise_words(words, st.session_state.word_scores)
 
