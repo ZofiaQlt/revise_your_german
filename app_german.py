@@ -34,31 +34,25 @@ def get_weighted_word(word_scores):
     return random.choice(weighted_list)
 
 def revise_words(words_dict, word_scores):
-    # Choix du type de révision
+    # Révision mixte : choix aléatoire du sens (français -> allemand ou allemand -> français)
+    if st.session_state.revision_direction == 'mixed':
+        if random.choice([True, False]):
+            st.session_state.revision_direction = 'french_to_german'
+        else:
+            st.session_state.revision_direction = 'german_to_french'
+
+    # Révision du français vers l'allemand
     if st.session_state.revision_direction == 'french_to_german':
-        # Révision du français vers l'allemand
         german_word = st.session_state.current_word
         french_translation = words_dict[german_word]
         st.write(f"Quel est le mot allemand pour _'{french_translation}'_ ?")
         correct_answer = german_word
+
+    # Révision de l'allemand vers le français
     elif st.session_state.revision_direction == 'german_to_french':
-        # Révision de l'allemand vers le français
         french_translation = words_dict[st.session_state.current_word]
         st.write(f"Quel est le mot français pour _'{st.session_state.current_word}'_ ?")
         correct_answer = french_translation
-    elif st.session_state.revision_direction == 'mixed':
-        # Révision mixte
-        if random.choice([True, False]):
-            # Révision du français vers l'allemand
-            german_word = st.session_state.current_word
-            french_translation = words_dict[german_word]
-            st.write(f"Quel est le mot allemand pour _'{french_translation}'_ ?")
-            correct_answer = german_word
-        else:
-            # Révision de l'allemand vers le français
-            french_translation = words_dict[st.session_state.current_word]
-            st.write(f"Quel est le mot français pour _'{st.session_state.current_word}'_ ?")
-            correct_answer = french_translation
 
     # Crée un formulaire pour gérer la soumission via "Enter"
     with st.form(key='my_form', clear_on_submit=True):
