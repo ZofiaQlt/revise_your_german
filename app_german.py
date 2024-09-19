@@ -51,11 +51,15 @@ def revise_words(words_dict, word_scores):
             return
 
     # Révision mixte : choix aléatoire du sens (français -> allemand ou allemand -> français)
+    #if st.session_state.revision_direction == 'mixed':
+       # if random.choice([True, False]):
+            #st.session_state.revision_direction = 'french_to_german'
+        #else:
+           #st.session_state.revision_direction = 'german_to_french'
+
+     # Révision mixte : choix aléatoire du sens (français -> allemand ou allemand -> français)
     if st.session_state.revision_direction == 'mixed':
-        if random.choice([True, False]):
-            st.session_state.revision_direction = 'french_to_german'
-        else:
-            st.session_state.revision_direction = 'german_to_french'
+        st.session_state.revision_direction = random.choice(['french_to_german', 'german_to_french'])
 
     # Révision du français vers l'allemand
     if st.session_state.revision_direction == 'french_to_german':
