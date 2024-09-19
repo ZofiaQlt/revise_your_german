@@ -84,6 +84,7 @@ def revise_words(words_dict, word_scores):
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
         st.rerun()  # Recharge la page pour afficher la nouvelle question
+        
 def show_statistics():
     """Affiche les statistiques de la session."""
     if st.session_state.session_start_time is None:
@@ -159,6 +160,8 @@ if __name__ == "__main__":
         st.session_state.correct = 0
         st.session_state.incorrect = 0
         st.session_state.revision_direction = None
+        st.session_state.session_start_time = None
+        st.session_state.error_counts = defaultdict(int)  # Réinitialiser les erreurs
         st.write("Révision réinitialisée!")
 
     # Utilisation de la méthode get pour éviter l'erreur KeyError
@@ -166,6 +169,7 @@ if __name__ == "__main__":
         if st.button("Commencer la révision"):
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
+            st.session_state.session_start_time = time.time()  # Début de la session
             st.rerun()  # Recharge la page pour commencer la révision
 
     elif st.session_state.revision_direction is None:
@@ -184,4 +188,7 @@ if __name__ == "__main__":
     else:
         revise_words(words, st.session_state.word_scores)
 
-    st.write(f"Score: {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
+    st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
+    
+    if st.button("Statistiques"):
+        show_statistics()
