@@ -1,4 +1,6 @@
-pip! install matplotlib
+import subprocess
+subprocess.run(['pip', 'install', 'matplotlib'])
+
 
 import streamlit as st
 import random
