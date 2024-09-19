@@ -1,2 +1,9 @@
 streamlit
 pandas
+random
+time
+matplotlib.pyplot
+io
+collections
+wordcloud
+numpy
