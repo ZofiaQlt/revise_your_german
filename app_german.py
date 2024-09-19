@@ -2,10 +2,10 @@ import streamlit as st
 import random
 import time
 import pandas as pd
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import io
 from collections import defaultdict
-#from wordcloud import WordCloud
+from wordcloud import WordCloud
 import numpy as np
 
 # Charger les données depuis un fichier CSV
@@ -84,7 +84,63 @@ def revise_words(words_dict, word_scores):
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
         st.rerun()  # Recharge la page pour afficher la nouvelle question
+def show_statistics():
+    """Affiche les statistiques de la session."""
+    if st.session_state.session_start_time is None:
+        st.write("Les statistiques seront disponibles après avoir commencé la révision.")
+        return
 
+    session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
+    avg_time_per_question = session_duration / (st.session_state.correct + st.session_state.incorrect) if (st.session_state.correct + st.session_state.incorrect) > 0 else 0
+
+    # Pourcentage de bonnes réponses
+    total_questions = st.session_state.correct + st.session_state.incorrect
+    correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
+
+    if st.session_state.correct + st.session_state.incorrect > 0:
+        # Créer un donut chart pour les réponses correctes et incorrectes
+        labels = 'Corrects', 'Incorrects'
+        sizes = [st.session_state.correct, st.session_state.incorrect]
+        fig, ax = plt.subplots()
+        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140,
+                                          pctdistance=0.85, wedgeprops=dict(width=0.3))
+
+        ax.axis('equal')  # forme circulaire du donut
+        
+        # Afficher les statistiques
+        st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
+        st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
+
+        # Afficher le donut chart
+        donut_chart = io.BytesIO()
+        plt.savefig(donut_chart, format='png')
+        donut_chart.seek(0)
+        st.image(donut_chart)
+
+        # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
+        if st.session_state.error_counts:
+            sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
+            top_5_errors = sorted_errors[:5]
+            st.write("---\n__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
+            for word, count in top_5_errors:
+                error_label = "erreur" if count == 1 else "erreurs"
+                st.write(f"- {word} : {count} {error_label}")
+
+            # Créer un word cloud
+            word_freq = {word: count for word, count in sorted_errors[:10]}
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
+
+            # Afficher le word cloud
+            st.write("---\n")
+            wordcloud_image = io.BytesIO()
+            wordcloud.to_image().save(wordcloud_image, format='png')
+            wordcloud_image.seek(0)
+            st.image(wordcloud_image)
+        else:
+            st.write("Aucune erreur enregistrée.")
+    else:
+        st.write("Pas encore de données pour les statistiques.")
+        
 if __name__ == "__main__":
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
 
