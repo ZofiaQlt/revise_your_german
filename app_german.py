@@ -71,12 +71,15 @@ def revise_words(words_dict, word_scores):
             st.write("✅ Correct !\n")
             st.session_state.correct += 1
             word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)  # Réduit le score pour diminuer la fréquence
+            st.session_state.sleep_time += 1  # Ajoute 1 seconde au temps de pause
             time.sleep(1)  # Pause de 1 seconde pour une réponse correcte
         else:
             st.write(f"❌ Faux ! La bonne réponse est _'{correct_answer}'_.\n")
             st.session_state.incorrect += 1
             word_scores[st.session_state.current_word] += 2  # Augmente le score pour augmenter la fréquence
-            time.sleep(2)  # Pause de 2 secondes pour une réponse incorrecte
+            st.session_state.error_counts[st.session_state.current_word] += 1  # Incrémentation du compteur d'erreurs
+            st.session_state.sleep_time += 1.75  # Ajoute des secondes au temps de pause
+            time.sleep(1.75)  # Pause pour une réponse incorrecte
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
