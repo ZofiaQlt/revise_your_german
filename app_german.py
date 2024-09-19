@@ -1,3 +1,5 @@
+pip install matplotlib
+
 import streamlit as st
 import random
 import time
@@ -7,8 +9,6 @@ import io
 from collections import defaultdict
 from wordcloud import WordCloud
 import numpy as np
-import os
-os.system('pip install matplotlib')
 
 # Charger les données depuis un fichier CSV
 @st.cache_data
