@@ -2,6 +2,7 @@ import streamlit as st
 import random
 import time
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 import io
 from collections import defaultdict
