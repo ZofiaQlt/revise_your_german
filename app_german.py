@@ -77,7 +77,7 @@ def revise_words(words_dict, word_scores):
 
     # Si le formulaire est soumis (par "Enter" ou en appuyant sur le bouton)
     if submit_button:
-        if user_input.lower() == correct_answer.lower():
+        if user_input.strip().lower() == correct_answer.lower():
             st.write("✅ Correct !\n")
             st.session_state.correct += 1
             word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)  # Réduit le score pour diminuer la fréquence
