@@ -2,8 +2,6 @@ streamlit
 pandas
 random
 time
-matplotlib
 io
 collections
-wordcloud
 numpy
