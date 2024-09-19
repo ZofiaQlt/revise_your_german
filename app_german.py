@@ -94,6 +94,7 @@ def revise_words(words_dict, word_scores):
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
+        st.session_state.revision_direction = 'mixed'  # Assure que le sens est aléatoire pour la prochaine question
         st.rerun()  # Recharge la page pour afficher la nouvelle question
 
 if __name__ == "__main__":
