@@ -2,7 +2,7 @@ streamlit
 pandas
 random
 time
-matplotlib.pyplot
+matplotlib
 io
 collections
 wordcloud
