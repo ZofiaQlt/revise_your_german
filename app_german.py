@@ -2,6 +2,11 @@ import streamlit as st
 import random
 import time
 import pandas as pd
+import matplotlib.pyplot as plt
+import io
+from collections import defaultdict
+from wordcloud import WordCloud
+import numpy as np
 
 # Charger les données depuis un fichier CSV
 @st.cache_data
@@ -25,8 +30,14 @@ if 'incorrect' not in st.session_state:
     st.session_state.incorrect = 0
 if 'revision_direction' not in st.session_state:
     st.session_state.revision_direction = None
-if 'error_mode' not in st.session_state:
-    st.session_state.error_mode = False  # Nouveau mode : révision des erreurs
+if 'session_start_time' not in st.session_state:
+    st.session_state.session_start_time = time.time()  # Démarre la session
+if 'sleep_time' not in st.session_state:
+    st.session_state.sleep_time = 0  # Initialisation de sleep_time
+
+# Dictionnaire pour suivre les erreurs par mot
+if 'error_counts' not in st.session_state:
+    st.session_state.error_counts = defaultdict(int)
 
 def get_weighted_word(word_scores):
     """Retourne un mot pondéré aléatoire selon son score."""
@@ -35,25 +46,7 @@ def get_weighted_word(word_scores):
         weighted_list.extend([word] * score)
     return random.choice(weighted_list)
 
-def get_error_words(word_scores, threshold=3):
-    """Retourne une liste des mots avec un score supérieur au seuil donné."""
-    return [word for word, score in word_scores.items() if score >= threshold]
-
 def revise_words(words_dict, word_scores):
-    # Révision des erreurs fréquentes
-    if st.session_state.error_mode:
-        error_words = get_error_words(word_scores)
-        if error_words:
-            st.session_state.current_word = random.choice(error_words)
-        else:
-            st.write("✅ Vous n'avez plus de mots à réviser dans les erreurs fréquentes !")
-            st.session_state.error_mode = False
-            return
-
-    # Révision mixte : choix aléatoire du sens (français -> allemand ou allemand -> français)
-    if st.session_state.revision_direction == 'mixed':
-        st.session_state.revision_direction = random.choice(['french_to_german', 'german_to_french'])
-
     # Révision du français vers l'allemand
     if st.session_state.revision_direction == 'french_to_german':
         german_word = st.session_state.current_word
@@ -87,9 +80,6 @@ def revise_words(words_dict, word_scores):
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
-        if st.session_state.revision_direction == 'mixed':
-            # Choisir un nouveau sens pour la prochaine question dans le mode mixte
-            st.session_state.revision_direction = random.choice(['french_to_german', 'german_to_french'])
         st.rerun()  # Recharge la page pour afficher la nouvelle question
 
 if __name__ == "__main__":
@@ -110,7 +100,6 @@ if __name__ == "__main__":
         st.session_state.correct = 0
         st.session_state.incorrect = 0
         st.session_state.revision_direction = None
-        st.session_state.error_mode = False
         st.write("Révision réinitialisée!")
 
     # Utilisation de la méthode get pour éviter l'erreur KeyError
@@ -119,12 +108,6 @@ if __name__ == "__main__":
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
             st.rerun()  # Recharge la page pour commencer la révision
-
-    # Bouton pour activer le mode "révision des erreurs"
-    elif not st.session_state.error_mode and st.button("___🧠 Réviser uniquement les erreurs fréquentes___"):
-        st.session_state.error_mode = True
-        st.session_state.revision_direction = 'mixed'  # Révision mixte par défaut
-        st.rerun()
 
     elif st.session_state.revision_direction is None:
         # Utilisation des colonnes pour placer les boutons côte à côte
