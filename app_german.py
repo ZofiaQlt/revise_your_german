@@ -209,7 +209,7 @@ def main():
     css="""
     <style>
         [data-testid="stForm"] {
-            background: LightBlue;
+            background: #ffffe0;
         }
     </style>
     """
