@@ -127,7 +127,7 @@ def show_statistics():
             top_5_errors = sorted_errors[:5]
             st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
             for word, count in top_5_errors:
-                error_label = "erreur" si count == 1 else "erreurs"
+                error_label = "erreur" if count == 1 else "erreurs"
                 st.write(f"- {word} : {count} {error_label}")
         else:
             st.write("Aucune erreur enregistrée.")
@@ -174,8 +174,6 @@ def show_statistics():
 
     # Fermeture de la div contenant le fond jaune
     st.markdown('</div>', unsafe_allow_html=True)
-
-
 
 
 def main():
