@@ -209,6 +209,10 @@ def main():
         <style>
         .stats-form {
             background-color: #fff9c4;  /* Jaune clair */
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         </style>
         """, unsafe_allow_html=True
@@ -218,11 +222,12 @@ def main():
         # Appliquer la classe CSS
         st.markdown('<div class="stats-form">', unsafe_allow_html=True)
 
+        # Contenu du formulaire
         if st.form_submit_button("Statistiques"):
             show_statistics()
 
+        # Fin de la div pour le formulaire
         st.markdown('</div>', unsafe_allow_html=True)
-
 
 
         
