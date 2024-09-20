@@ -209,7 +209,7 @@ def main():
         <style>
         .stats-form {
             background-color: #fff9c4;  /* Jaune clair */
-            padding: 5px;
+            padding: 200px;
             border-radius: 5px;
             margin-top: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
