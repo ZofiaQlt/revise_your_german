@@ -203,19 +203,23 @@ def main():
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
-     # Créer un formulaire de statistiques avec une classe CSS spécifique
+    # Formulaire de statistiques avec une classe CSS spécifique
     with st.form(key='stats_form', clear_on_submit=False):
         if st.form_submit_button("Statistiques"):
             show_statistics()
 
-    css="""
-    <style>
-        [data-testid="stats_form"] {
-            background: #ffffe0;
-        }
-    </style>
-    """
-    st.write(css, unsafe_allow_html=True)
-    
+    # CSS pour le formulaire de statistiques
+    st.markdown(
+        """
+        <style>
+            #stats_form {
+                background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
+                padding: 10px;
+                border-radius: 10px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 if __name__ == "__main__":
     main() 
