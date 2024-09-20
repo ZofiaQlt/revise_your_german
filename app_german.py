@@ -203,17 +203,21 @@ def main():
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
+     # Utilisation d'une div unique pour le formulaire de statistiques
+    st.markdown('<div class="stats-form">', unsafe_allow_html=True)
     with st.form(key='stats_form'):
         if st.form_submit_button("Statistiques"):
             show_statistics()
-        css="""
-        <style>
-            [data-testid="stForm"] {
-                background: #ffffe0;
-            }
-        </style>
-        """
-        st.write(css, unsafe_allow_html=True)
-        
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # CSS pour appliquer un fond jaune uniquement au formulaire de statistiques
+    css = """
+    <style>
+        .stats-form [data-testid="stForm"] {
+            background: #ffffe0;
+        }
+    </style>
+    """
+    st.write(css, unsafe_allow_html=True)
 if __name__ == "__main__":
     main() 
