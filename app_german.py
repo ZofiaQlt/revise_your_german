@@ -189,7 +189,7 @@ def main():
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2 = st.columns([3, 5])
         with col1:
-            if st.button("___Français 🇫🇷 -> Allemand 🇩🇪___", key='french_to_german'):
+            if st.button("___🇫🇷 Français  -> 🇩🇪 Allemand___", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
                 st.rerun()
@@ -204,15 +204,11 @@ def main():
         correct_word = "correct" if st.session_state.correct <= 1 else "corrects"
         incorrect_word = "incorrect" if st.session_state.incorrect <= 1 else "incorrects"
         st.write(f"Score : {st.session_state.correct} {correct_word}, {st.session_state.incorrect} {incorrect_word}")
-
-        #st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
         with st.form(key='stats_form'):
             if st.form_submit_button("Statistiques"):
                 show_statistics()
 
 
-
-    
 if __name__ == "__main__":
     main() 
