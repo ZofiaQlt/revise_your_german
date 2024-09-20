@@ -10,3 +10,6 @@ Lien vers l'application : https://revise-your-german.streamlit.app
 
 - ### Exemple question 2
 <img width="726" alt="Capture d’écran 2024-09-04 à 19 54 03" src="https://github.com/user-attachments/assets/7c5605f3-913d-49fe-8c52-964d9535400d">
+
+- ### Exemple question 3
+<img width="729" alt="Capture d’écran 2024-09-21 à 00 02 43" src="https://github.com/user-attachments/assets/f4545080-0c17-4bcc-9fbd-c1282a78e9ff">
