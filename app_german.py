@@ -87,6 +87,19 @@ def revise_words(words_dict, word_scores):
         
 def show_statistics():
     """Affiche les statistiques de la session."""
+    
+    # CSS pour ajouter un fond jaune clair à la section des statistiques
+    st.markdown("""
+        <style>
+        .stat-section {
+            background-color: #ffffe0;  /* Fond jaune pâle */
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #d3d3d3;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     if st.session_state.session_start_time is None:
         st.write("Les statistiques seront disponibles après avoir commencé la révision.")
         return
@@ -98,6 +111,9 @@ def show_statistics():
     total_questions = st.session_state.correct + st.session_state.incorrect
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
+    # Encadrer les statistiques dans une div avec la classe stat-section
+    st.markdown('<div class="stat-section">', unsafe_allow_html=True)
+    
     if st.session_state.correct + st.session_state.incorrect > 0:
         # Afficher les statistiques générales
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
@@ -153,6 +169,10 @@ def show_statistics():
                 st.image(wordcloud_image)
     else:
         st.write("Pas encore de données pour les statistiques.")
+    
+    # Fermeture de la div contenant le fond jaune
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 def main():
