@@ -206,14 +206,14 @@ def main():
     with st.form(key='stats_form'):
         if st.form_submit_button("Statistiques"):
             show_statistics()
-    css="""
-    <style>
-        [data-testid="stForm"] {
-            background: #ffffe0;
-        }
-    </style>
-    """
-    st.write(css, unsafe_allow_html=True)
+        css="""
+        <style>
+            [data-testid="stForm"] {
+                background: #ffffe0;
+            }
+        </style>
+        """
+        st.write(css, unsafe_allow_html=True)
         
 if __name__ == "__main__":
     main() 
