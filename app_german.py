@@ -118,9 +118,10 @@ def show_statistics():
         # Créer un donut chart pour les réponses correctes et incorrectes
         labels = 'Correct', 'Incorrect'
         sizes = [st.session_state.correct, st.session_state.incorrect]
+        colors = ['#440154', '#FDE725']  # Couleurs correspondantes à viridis
         fig, ax = plt.subplots()
         fig.set_size_inches(4, 4)
-        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
+        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
         ax.axis('equal')  # forme circulaire du donut
 
         # Créer deux colonnes pour le donut et le wordcloud
