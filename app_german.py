@@ -208,15 +208,20 @@ def main():
         if st.form_submit_button("Statistiques"):
             show_statistics()
 
-# CSS pour le formulaire de statistiques
+   # CSS pour le formulaire de statistiques
     css = """
     <style>
-        [data-testid="stats_form"] {
+        .stats-form {
             background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
         }
     </style>
     """
     st.write(css, unsafe_allow_html=True)
+
+    # Appliquer la classe CSS au formulaire des statistiques
+    st.markdown('<div class="stats-form">', unsafe_allow_html=True)
+    st.form(key='stats_form', clear_on_submit=False)
+    st.markdown('</div>', unsafe_allow_html=True)
     
 if __name__ == "__main__":
     main() 
