@@ -213,8 +213,6 @@ def main():
     <style>
         [data-testid="stForm"][key="stats_form"] {
             background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
-            padding: 10px;
-            border-radius: 10px;
         }
     </style>
     """
