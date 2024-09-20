@@ -207,17 +207,19 @@ def main():
         if st.form_submit_button("Statistiques"):
             show_statistics()
         # Ajoute ce CSS à la fin de ton code
-css = """
-<style>
-    [data-testid="stForm"][key='stats_form'] {
-        background: #ffffe0; /* Pour le formulaire des statistiques */
-    }
-    [data-testid="stForm"][key='my_form'] {
-        background: white; /* Pour le formulaire de réponse */
-    }
-</style>
-"""
-st.write(css, unsafe_allow_html=True)
+ # CSS pour les formulaires
+    css = """
+    <style>
+        [data-testid="stForm"] {
+            background: white; /* Par défaut, le fond est blanc */
+        }
+        [data-testid="stForm"][key='stats_form'] {
+            background: #ffffe0; /* Pour le formulaire des statistiques */
+        }
+    </style>
+    """
+    st.write(css, unsafe_allow_html=True)
+
 
     
 if __name__ == "__main__":
