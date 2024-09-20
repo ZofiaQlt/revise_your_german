@@ -2,11 +2,8 @@ import streamlit as st
 import random
 import time
 import pandas as pd
-import matplotlib
-import matplotlib.pyplot as plt
 import io
 from collections import defaultdict
-from wordcloud import WordCloud
 import numpy as np
 
 # Charger les données depuis un fichier CSV
