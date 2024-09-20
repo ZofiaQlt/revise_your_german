@@ -209,19 +209,16 @@ def main():
             show_statistics()
 
     # CSS spécifique pour le formulaire de statistiques (background jaune) en utilisant l'ID unique
-    st.write("""
+
+
+    css="""
     <style>
-        #stats_form {
+        [data-testid="stats_form"] {
             background: #ffffe0;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        /* Le formulaire my_form conserve le fond blanc par défaut */
-        [data-testid="stForm"] {
-            background: white;
         }
     </style>
-    """, unsafe_allow_html=True)
+    """
+    st.write(css, unsafe_allow_html=True)
     
 if __name__ == "__main__":
     main() 
