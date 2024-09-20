@@ -208,10 +208,7 @@ def main():
         """
         <style>
         .stats-form {
-            background-color: #fff9c4;  /* Jaune clair */
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
+            background-color: #fff9c4;  /* Jaune clair */;
         }
         </style>
         """, unsafe_allow_html=True
