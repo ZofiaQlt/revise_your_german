@@ -174,7 +174,6 @@ def main():
     Gère l'interface utilisateur, le démarrage et la réinitialisation de la session,
     le choix du sens de révision, ainsi que la gestion des scores et l'affichage des statistiques.
     """
-
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
 
     # Ajouter un espace
