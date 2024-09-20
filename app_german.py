@@ -116,7 +116,7 @@ def show_statistics():
 
         # Placer le bloc contenant les deux colonnes (donut et wordcloud) tout en bas
         # Créer un donut chart pour les réponses correctes et incorrectes
-        labels = 'Corrects', 'Incorrects'
+        labels = 'Correct', 'Incorrect'
         sizes = [st.session_state.correct, st.session_state.incorrect]
         fig, ax = plt.subplots()
         fig.set_size_inches(4, 4)
