@@ -114,6 +114,7 @@ def show_statistics():
         else:
             st.write("Aucune erreur enregistrée.")
 
+        st.write("---")
         # Placer le bloc contenant les deux colonnes (donut et wordcloud) tout en bas
         # Créer un donut chart pour les réponses correctes et incorrectes
         labels = 'Correct', 'Incorrect'
