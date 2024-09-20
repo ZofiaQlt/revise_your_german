@@ -189,12 +189,12 @@ def main():
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2 = st.columns([3, 5])
         with col1:
-            if st.button("___🇫🇷 Français  -> 🇩🇪 Allemand___", key='french_to_german'):
+            if st.button("___🇫🇷 Français -> 🇩🇪 Allemand___", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
                 st.rerun()
         with col2:
-            if st.button("___Allemand 🇩🇪 -> Français 🇫🇷___", key='german_to_french'):
+            if st.button("___🇩🇪 Allemand -> 🇫🇷 Français___", key='german_to_french'):
                 st.session_state.revision_direction = 'german_to_french'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
                 st.rerun()
