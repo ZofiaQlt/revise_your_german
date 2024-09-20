@@ -200,7 +200,12 @@ def main():
                 st.rerun()
     else:
         revise_words(words, st.session_state.word_scores)
-        st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
+        
+        correct_word = "correct" if st.session_state.correct <= 1 else "corrects"
+        incorrect_word = "incorrect" if st.session_state.incorrect <= 1 else "incorrects"
+        st.write(f"Score : {st.session_state.correct} {correct_word}, {st.session_state.incorrect} {incorrect_word}")
+
+        #st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
         with st.form(key='stats_form'):
             if st.form_submit_button("Statistiques"):
