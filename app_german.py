@@ -87,73 +87,73 @@ def revise_words(words_dict, word_scores):
         
 def show_statistics():
     """Affiche les statistiques de la session."""
-    with st.form(key='stats_form'):  # Encadrer tout le contenu dans un container
-        if st.session_state.session_start_time is None:
-            st.write("Les statistiques seront disponibles après avoir commencé la révision.")
-            return
+    with st.form(key='stats_form'):
+        # Ajoutez un bouton de soumission ici pour éviter l'erreur
+        st.write("Cliquez sur le bouton ci-dessous pour afficher les statistiques.")
 
-        session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
-        avg_time_per_question = session_duration / (st.session_state.correct + st.session_state.incorrect) if (st.session_state.correct + st.session_state.incorrect) > 0 else 0
+        if st.form_submit_button("Afficher les statistiques"):
+            if st.session_state.session_start_time is None:
+                st.write("Les statistiques seront disponibles après avoir commencé la révision.")
+                return
 
-        # Pourcentage de bonnes réponses
-        total_questions = st.session_state.correct + st.session_state.incorrect
-        correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
+            session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
+            avg_time_per_question = session_duration / (st.session_state.correct + st.session_state.incorrect) if (st.session_state.correct + st.session_state.incorrect) > 0 else 0
 
-        if st.session_state.correct + st.session_state.incorrect > 0:
-            # Afficher les statistiques générales
-            st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
-            st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
+            total_questions = st.session_state.correct + st.session_state.incorrect
+            correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
-            # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
-            if st.session_state.error_counts:
-                sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
-                top_5_errors = sorted_errors[:5]
-                st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
-                for word, count in top_5_errors:
-                    error_label = "erreur" if count == 1 else "erreurs"
-                    st.write(f"- {word} : {count} {error_label}")
+            if total_questions > 0:
+                st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
+                st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
+
+                if st.session_state.error_counts:
+                    sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
+                    top_5_errors = sorted_errors[:5]
+                    st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
+                    for word, count in top_5_errors:
+                        error_label = "erreur" if count == 1 else "erreurs"
+                        st.write(f"- {word} : {count} {error_label}")
+                else:
+                    st.write("Aucune erreur enregistrée.")
+
+                st.write("---\n")
+
+                # Créer un donut chart
+                labels = 'Correct', 'Incorrect'
+                sizes = [st.session_state.correct, st.session_state.incorrect]
+                colors = ['#ebd61c', '#eb4528']
+                fig, ax = plt.subplots()
+                fig.set_size_inches(6, 6)
+                wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
+
+                for text in texts + autotexts:
+                    text.set_fontsize(10.5)
+                ax.axis('equal')
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    donut_chart = io.BytesIO()
+                    plt.savefig(donut_chart, format='png')
+                    donut_chart.seek(0)
+                    st.image(donut_chart)
+
+                if st.session_state.error_counts:
+                    word_freq = {word: count for word, count in sorted_errors[:10]}
+                    colors_wordcloud = ['black', '#ebd61c', '#eb4528']
+
+                    def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+                        return random.choice(colors_wordcloud)
+
+                    wordcloud = WordCloud(width=800, height=750, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
+
+                    with col2:
+                        wordcloud_image = io.BytesIO()
+                        wordcloud.to_image().save(wordcloud_image, format='png')
+                        wordcloud_image.seek(0)
+                        st.image(wordcloud_image)
             else:
-                st.write("Aucune erreur enregistrée.")
-
-            st.write("---\n")
-            # Créer un donut chart pour les réponses correctes et incorrectes
-            labels = 'Correct', 'Incorrect'
-            sizes = [st.session_state.correct, st.session_state.incorrect]
-            colors = ['#ebd61c', '#eb4528']
-            fig, ax = plt.subplots()
-            fig.set_size_inches(6, 6)
-            wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
-
-            for text in texts + autotexts:
-                text.set_fontsize(10.5)
-            ax.axis('equal')
-
-            # Créer deux colonnes pour le donut et le wordcloud
-            col1, col2 = st.columns(2)
-
-            with col1:
-                donut_chart = io.BytesIO()
-                plt.savefig(donut_chart, format='png')
-                donut_chart.seek(0)
-                st.image(donut_chart)
-
-            if st.session_state.error_counts:
-                word_freq = {word: count for word, count in sorted_errors[:10]}
-                colors_wordcloud = ['black', '#ebd61c', '#eb4528']
-
-                def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
-                    return random.choice(colors_wordcloud)
-
-                wordcloud = WordCloud(width=800, height=750, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
-
-                with col2:
-                    wordcloud_image = io.BytesIO()
-                    wordcloud.to_image().save(wordcloud_image, format='png')
-                    wordcloud_image.seek(0)
-                    st.image(wordcloud_image)
-        else:
-            st.write("Pas encore de données pour les statistiques.")
-
+                st.write("Pas encore de données pour les statistiques.")
 
 
 def main():
