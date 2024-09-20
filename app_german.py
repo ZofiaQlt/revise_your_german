@@ -106,14 +106,16 @@ def show_statistics():
         fig.set_size_inches(4, 4)
         wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
         ax.axis('equal')  # forme circulaire du donut
+        
+        # Afficher les statistiques générales
+        st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
+        st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
 
-        # Créer des colonnes pour organiser les statistiques et le graphique donut
+        # Créer deux colonnes pour le donut et le wordcloud
         col1, col2 = st.columns(2)
+
+        # Afficher le donut chart dans la première colonne
         with col1:
-            st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
-            st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
-        with col2:
-            # Afficher le donut chart
             donut_chart = io.BytesIO()
             plt.savefig(donut_chart, format='png')
             donut_chart.seek(0)
@@ -123,22 +125,17 @@ def show_statistics():
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
-            st.write("---")
+            st.write("---\n__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
+            for word, count in top_5_errors:
+                error_label = "erreur" if count == 1 else "erreurs"
+                st.write(f"- {word} : {count} {error_label}")
 
-            # Créer des colonnes pour le top 5 des erreurs et le word cloud
-            col1, col2 = st.columns(2)
-            with col1:
-                st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__")
-                for word, count in top_5_errors:
-                    error_label = "erreur" if count == 1 else "erreurs"
-                    st.write(f"- {word} : {count} {error_label}")
+            # Créer un word cloud
+            word_freq = {word: count for word, count in sorted_errors[:10]}
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
 
+            # Afficher le word cloud dans la deuxième colonne
             with col2:
-                # Créer un word cloud
-                word_freq = {word: count for word, count in sorted_errors[:10]}
-                wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
-
-                # Afficher le word cloud
                 wordcloud_image = io.BytesIO()
                 wordcloud.to_image().save(wordcloud_image, format='png')
                 wordcloud_image.seek(0)
@@ -147,7 +144,6 @@ def show_statistics():
             st.write("Aucune erreur enregistrée.")
     else:
         st.write("Pas encore de données pour les statistiques.")
-
 
 def main():
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
