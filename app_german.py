@@ -170,11 +170,15 @@ def show_statistics():
 
 
 def main():
+    """
+    Gère l'interface utilisateur, le démarrage et la réinitialisation de la session,
+    le choix du sens de révision, ainsi que la gestion des scores et l'affichage des statistiques.
+    """
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
-    
+
     # Ajouter un espace
     st.write("")
-    
+
     # Ajouter une image
     st.image("img.png", width=400)
 
@@ -182,47 +186,46 @@ def main():
     st.write("")
 
     if st.button("Réinitialiser la révision"):
-        # Réinitialiser les variables de session seulement si nécessaire
         st.session_state.word_scores = {word: 1 for word in words.keys()}
         st.session_state.start = False
         st.session_state.correct = 0
         st.session_state.incorrect = 0
         st.session_state.revision_direction = None
         st.session_state.session_start_time = None
-        st.session_state.error_counts = defaultdict(int)
+        st.session_state.error_counts = defaultdict(int)  # Réinitialiser les erreurs
         st.write("Révision réinitialisée!")
 
+    # Utilisation de la méthode get pour éviter l'erreur KeyError
     if not st.session_state.get('start', False):
         if st.button("Commencer la révision"):
             st.session_state.start = True
             st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-            st.session_state.session_start_time = time.time()  # Démarre la session
-            # Pas besoin de st.rerun ici, car la logique continue naturellement
-    else:
-        # Direction de la révision non définie
-        if st.session_state.revision_direction is None:
-            col1, col2 = st.columns([3, 5])
-            with col1:
-                if st.button("___🇫🇷 Français -> 🇩🇪 Allemand___", key='french_to_german'):
-                    st.session_state.revision_direction = 'french_to_german'
-                    st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
-            with col2:
-                if st.button("___🇩🇪 Allemand -> 🇫🇷 Français___", key='german_to_french'):
-                    st.session_state.revision_direction = 'german_to_french'
-                    st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
+            st.session_state.session_start_time = time.time()  # Début de la session
+            st.rerun()  # Recharge la page pour commencer la révision
 
-        else:
-            revise_words(words, st.session_state.word_scores)
-            
-            correct_word = "correct" if st.session_state.correct <= 1 else "corrects"
-            incorrect_word = "incorrect" if st.session_state.incorrect <= 1 else "incorrects"
-            st.write(f"Score : {st.session_state.correct} {correct_word}, {st.session_state.incorrect} {incorrect_word}")
+    elif st.session_state.revision_direction is None:
+        # Utilisation des colonnes pour placer les boutons côte à côte
+        col1, col2 = st.columns([3, 5])
+        with col1:
+            if st.button("___🇫🇷 Français -> 🇩🇪 Allemand___", key='french_to_german'):
+                st.session_state.revision_direction = 'french_to_german'
+                st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
+                st.rerun()
+        with col2:
+            if st.button("___🇩🇪 Allemand -> 🇫🇷 Français___", key='german_to_french'):
+                st.session_state.revision_direction = 'german_to_french'
+                st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
+                st.rerun()
+    else:
+        revise_words(words, st.session_state.word_scores)
         
+        correct_word = "correct" if st.session_state.correct <= 1 else "corrects"
+        incorrect_word = "incorrect" if st.session_state.incorrect <= 1 else "incorrects"
+        st.write(f"Score : {st.session_state.correct} {correct_word}, {st.session_state.incorrect} {incorrect_word}")
+    
         with st.form(key='stats_form'):
             if st.form_submit_button("Statistiques"):
                 show_statistics()
-
-
 
 if __name__ == "__main__":
     main() 
