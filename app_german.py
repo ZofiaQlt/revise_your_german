@@ -122,6 +122,9 @@ def show_statistics():
         fig, ax = plt.subplots()
         fig.set_size_inches(5.5, 5.5)
         wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
+        # Personnaliser la taille de la police
+        for text in texts + autotexts:
+            text.set_fontsize(12)  # Ajuste la taille de la police selon tes besoins
         ax.axis('equal')  # forme circulaire du donut
 
         # Créer deux colonnes pour le donut et le wordcloud
