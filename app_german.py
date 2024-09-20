@@ -91,17 +91,22 @@ def show_statistics():
     # CSS pour ajouter un fond jaune clair à la section des statistiques
     st.markdown("""
         <style>
-        .stat-section {
+        .stat-container {
             background-color: #ffffe0;  /* Fond jaune pâle */
             padding: 20px;
             border-radius: 10px;
             border: 1px solid #d3d3d3;
+            margin-top: 20px;
         }
         </style>
     """, unsafe_allow_html=True)
 
+    # Encadrer toute la section statistiques dans un div avec la classe stat-container
+    st.markdown('<div class="stat-container">', unsafe_allow_html=True)
+
     if st.session_state.session_start_time is None:
         st.write("Les statistiques seront disponibles après avoir commencé la révision.")
+        st.markdown('</div>', unsafe_allow_html=True)  # Fermeture de la div
         return
 
     session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
@@ -111,9 +116,6 @@ def show_statistics():
     total_questions = st.session_state.correct + st.session_state.incorrect
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
-    # Encadrer les statistiques dans une div avec la classe stat-section
-    st.markdown('<div class="stat-section">', unsafe_allow_html=True)
-    
     if st.session_state.correct + st.session_state.incorrect > 0:
         # Afficher les statistiques générales
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
@@ -125,7 +127,7 @@ def show_statistics():
             top_5_errors = sorted_errors[:5]
             st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
             for word, count in top_5_errors:
-                error_label = "erreur" if count == 1 else "erreurs"
+                error_label = "erreur" si count == 1 else "erreurs"
                 st.write(f"- {word} : {count} {error_label}")
         else:
             st.write("Aucune erreur enregistrée.")
@@ -169,9 +171,10 @@ def show_statistics():
                 st.image(wordcloud_image)
     else:
         st.write("Pas encore de données pour les statistiques.")
-    
+
     # Fermeture de la div contenant le fond jaune
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
