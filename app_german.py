@@ -2,7 +2,6 @@ import streamlit as st
 import random
 import time
 import pandas as pd
-#import matplotlib
 import matplotlib.pyplot as plt
 import io
 from collections import defaultdict
@@ -18,7 +17,7 @@ def load_data():
 # Charger le fichier CSV de vocabulaire
 words = load_data()
 
-# Initialisation des scores des mots et autres variables
+# Initialisation des variables
 if 'word_scores' not in st.session_state:
     st.session_state.word_scores = {word: 1 for word in words.keys()}
 if 'current_word' not in st.session_state:
@@ -61,26 +60,26 @@ def revise_words(words_dict, word_scores):
         st.write(f"Quel est le mot français pour _'{st.session_state.current_word}'_ ?")
         correct_answer = french_translation
 
-    # Crée un formulaire pour gérer la soumission via "Enter"
+    # Crée un formulaire pour gérer la soumission via "Enter" du clavier ou en en appuyant sur le bouton
     with st.form(key='my_form', clear_on_submit=True):
         user_input = st.text_input("Votre réponse:", key="answer_input")
         submit_button = st.form_submit_button(label="Valider")
 
-    # Si le formulaire est soumis (par "Enter" ou en appuyant sur le bouton)
+    # Si le formulaire est soumis
     if submit_button:
         if user_input.strip().lower() == correct_answer.lower():
             st.write("✅ Correct !\n")
             st.session_state.correct += 1
             word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)  # Réduit le score pour diminuer la fréquence
             st.session_state.sleep_time += 1  # Ajoute 1 seconde au temps de pause
-            time.sleep(1)  # Pause de 1 seconde pour une réponse correcte
+            time.sleep(1)  # Pause
         else:
             st.write(f"❌ Faux ! La bonne réponse est _'{correct_answer}'_.\n")
             st.session_state.incorrect += 1
             word_scores[st.session_state.current_word] += 2  # Augmente le score pour augmenter la fréquence
             st.session_state.error_counts[st.session_state.current_word] += 1  # Incrémentation du compteur d'erreurs
             st.session_state.sleep_time += 1.75  # Ajoute des secondes au temps de pause
-            time.sleep(1.75)  # Pause pour une réponse incorrecte
+            time.sleep(1.75)  # Pause
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
@@ -142,8 +141,8 @@ def show_statistics():
             st.write("Aucune erreur enregistrée.")
     else:
         st.write("Pas encore de données pour les statistiques.")
-        
-if __name__ == "__main__":
+
+def main():
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
 
     # Ajouter un espace
@@ -193,3 +192,7 @@ if __name__ == "__main__":
     
     if st.button("Statistiques"):
         show_statistics()
+        
+if __name__ == "__main__":
+    main()
+    
