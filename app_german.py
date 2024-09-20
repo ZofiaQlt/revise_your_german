@@ -137,13 +137,11 @@ def show_statistics():
         # Créer un word cloud et l'afficher dans la deuxième colonne
         if st.session_state.error_counts:
             word_freq = {word: count for word, count in sorted_errors[:10]}
-            # Fonction pour colorier le word cloud en noir, rouge sombre, jaune
             colors_wordcloud = ['black', '#ebd61c', '#eb4528']
             def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
                 return random.choice(colors_wordcloud)
 
             wordcloud = WordCloud(width=800, height=700, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
-            #wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
 
             with col2:
                 wordcloud_image = io.BytesIO()
@@ -152,7 +150,6 @@ def show_statistics():
                 st.image(wordcloud_image)
     else:
         st.write("Pas encore de données pour les statistiques.")
-
 
 
 def main():
