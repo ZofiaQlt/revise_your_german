@@ -203,9 +203,10 @@ def main():
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
-    with st.container():
-        if st.button("Statistiques"):
-            show_statistics()
+    with st.form(key='stats_form'):
+    if st.form_submit_button("Statistiques"):
+        show_statistics()
+
 
         
 if __name__ == "__main__":
