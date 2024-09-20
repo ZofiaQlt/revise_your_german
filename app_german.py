@@ -208,7 +208,7 @@ def main():
             show_statistics()
         css="""
         <style>
-            [data-testid="stForm"]:nth-child(2) {
+            [data-testid="stForm"]:nth-child(1) {
                 background: #ffffe0;
             }
         </style>
