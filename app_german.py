@@ -87,26 +87,8 @@ def revise_words(words_dict, word_scores):
         
 def show_statistics():
     """Affiche les statistiques de la session."""
-    
-    # CSS pour ajouter un fond jaune clair à la section des statistiques
-    st.markdown("""
-        <style>
-        .stat-container {
-            background-color: #ffffe0;  /* Fond jaune pâle */
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #d3d3d3;
-            margin-top: 20px;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # Encadrer toute la section statistiques dans un div avec la classe stat-container
-    st.markdown('<div class="stat-container">', unsafe_allow_html=True)
-
     if st.session_state.session_start_time is None:
         st.write("Les statistiques seront disponibles après avoir commencé la révision.")
-        st.markdown('</div>', unsafe_allow_html=True)  # Fermeture de la div
         return
 
     session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
@@ -172,9 +154,6 @@ def show_statistics():
     else:
         st.write("Pas encore de données pour les statistiques.")
 
-    # Fermeture de la div contenant le fond jaune
-    st.markdown('</div>', unsafe_allow_html=True)
-
 
 def main():
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
@@ -223,19 +202,10 @@ def main():
         revise_words(words, st.session_state.word_scores)
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
-
-    with st.form(key='stats_form', clear_on_submit=True):
-        # Appliquer la classe CSS
-        st.markdown('<div class="stats-form">', unsafe_allow_html=True)
-
-        # Contenu du formulaire
+    
+    with st.form(key='stats_form'):
         if st.form_submit_button("Statistiques"):
             show_statistics()
-
-        # Fin de la div pour le formulaire
-        st.markdown('</div>', unsafe_allow_html=True)
-
-
         
 if __name__ == "__main__":
-    main()
+    main() 
