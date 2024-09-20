@@ -91,17 +91,28 @@ def show_statistics():
         st.write("Les statistiques seront disponibles après avoir commencé la révision.")
         return
 
-    session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
-    avg_time_per_question = session_duration / (st.session_state.correct + st.session_state.incorrect) if (st.session_state.correct + st.session_state.incorrect) > 0 else 0
+    # Calcul du temps total écoulé, en soustrayant le temps de pause (sleep_time)
+    session_duration = time.time() - st.session_state.session_start_time
+
+    # Vérifiez que le temps total est supérieur au temps de pause
+    if session_duration > st.session_state.sleep_time:
+        effective_duration = session_duration - st.session_state.sleep_time
+    else:
+        effective_duration = 0  # Éviter des temps négatifs
+
+    # Calcul du temps moyen par question
+    total_questions = st.session_state.correct + st.session_state.incorrect
+    if total_questions > 0:
+        avg_time_per_question = effective_duration / total_questions
+    else:
+        avg_time_per_question = 0  # Éviter division par zéro
 
     # Pourcentage de bonnes réponses
-    total_questions = st.session_state.correct + st.session_state.incorrect
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
-    if st.session_state.correct + st.session_state.incorrect > 0:
-        # Afficher les statistiques générales
-        st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
-        st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
+    # Afficher les statistiques
+    st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
+    st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
 
         # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
         if st.session_state.error_counts:
