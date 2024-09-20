@@ -141,7 +141,7 @@ def show_statistics():
             def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
                 return random.choice(colors_wordcloud)
 
-            wordcloud = WordCloud(width=800, height=700, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
+            wordcloud = WordCloud(width=800, height=750, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
 
             with col2:
                 wordcloud_image = io.BytesIO()
