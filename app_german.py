@@ -98,48 +98,51 @@ def show_statistics():
     total_questions = st.session_state.correct + st.session_state.incorrect
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
-    if st.session_state.correct + st.session_state.incorrect > 0:
-        # Créer un donut chart pour les réponses correctes et incorrectes
-        labels = 'Corrects', 'Incorrects'
-        sizes = [st.session_state.correct, st.session_state.incorrect]
-        fig, ax = plt.subplots()
-        fig.set_size_inches(4, 4)
-        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
-        ax.axis('equal')  # forme circulaire du donut
-        
-        # Afficher les statistiques générales
+    # Créer les colonnes
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
         st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
-
-        # Créer deux colonnes pour le donut et le wordcloud
-        col1, col2 = st.columns(2)
-
-        # Afficher le donut chart dans la première colonne
-        with col1:
-            donut_chart = io.BytesIO()
-            plt.savefig(donut_chart, format='png')
-            donut_chart.seek(0)
-            st.image(donut_chart)
 
         # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
-            st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__")
+            st.write("---\n__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
             for word, count in top_5_errors:
-                error_label = "erreur" if count == 1 else "erreurs"
+                error_label = "erreur" si count == 1 else "erreurs"
                 st.write(f"- {word} : {count} {error_label}")
+        else:
+            st.write("Aucune erreur enregistrée.")
+
+    with col2:
+        if st.session_state.correct + st.session_state.incorrect > 0:
+            # Créer un donut chart pour les réponses correctes et incorrectes
+            labels = 'Corrects', 'Incorrects'
+            sizes = [st.session_state.correct, st.session_state.incorrect]
+            fig, ax = plt.subplots()
+            fig.set_size_inches(4, 4)
+            wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
+            ax.axis('equal')  # forme circulaire du donut
+
+            # Afficher le donut chart
+            donut_chart = io.BytesIO()
+            plt.savefig(donut_chart, format='png')
+            donut_chart.seek(0)
+            st.image(donut_chart)
 
             # Créer un word cloud
             word_freq = {word: count for word, count in sorted_errors[:10]}
             wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
 
-            # Afficher le word cloud dans la deuxième colonne
-            with col2:
-                wordcloud_image = io.BytesIO()
-                wordcloud.to_image().save(wordcloud_image, format='png')
-                wordcloud_image.seek(0)
-                st.image(wordcloud_image)
+            # Afficher le word cloud
+            st.write("---\n")
+            wordcloud_image = io.BytesIO()
+            wordcloud.to_image().save(wordcloud_image, format='png')
+            wordcloud_image.seek(0)
+            st.image(wordcloud_image)
+
         else:
             st.write("Aucune erreur enregistrée.")
     else:
