@@ -68,13 +68,13 @@ def revise_words(words_dict, word_scores):
     # Si le formulaire est soumis
     if submit_button:
         if user_input.strip().lower() == correct_answer.lower():
-            st.write("✅ Correct !\n")
+            st.write("✅  Correct !\n")
             st.session_state.correct += 1
             word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)  # Réduit le score pour diminuer la fréquence
             st.session_state.sleep_time += 1  # Ajoute 1 seconde au temps de pause
             time.sleep(1)  # Pause
         else:
-            st.write(f"❌ Faux ! La bonne réponse est _'{correct_answer}'_.\n")
+            st.write(f"❌  Faux ! La bonne réponse est _'{correct_answer}'_.\n")
             st.session_state.incorrect += 1
             word_scores[st.session_state.current_word] += 2  # Augmente le score pour augmenter la fréquence
             st.session_state.error_counts[st.session_state.current_word] += 1  # Incrémentation du compteur d'erreurs
@@ -189,7 +189,7 @@ def main():
         # Utilisation des colonnes pour placer les boutons côte à côte
         col1, col2 = st.columns([3, 5])
         with col1:
-            if st.button("___🇫🇷  Français -> 🇩🇪  Allemand___", key='french_to_german'):
+            if st.button("___🇫🇷 Français -> 🇩🇪 Allemand___", key='french_to_german'):
                 st.session_state.revision_direction = 'french_to_german'
                 st.session_state.current_word = get_weighted_word(st.session_state.word_scores)
                 st.rerun()
