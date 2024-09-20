@@ -88,8 +88,8 @@ def revise_words(words_dict, word_scores):
             st.write(f"✅  Correct ! Mais tu as oublié l'accent. Le mot s'écrit _'{correct_answer}'_.\n")
             st.session_state.correct += 1
             word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)
-            st.session_state.sleep_time += 1
-            time.sleep(1)
+            st.session_state.sleep_time += 1.75
+            time.sleep(1.75)
 
         else:
             st.write(f"❌  Faux ! La bonne réponse est _'{correct_answer}'_.\n")
