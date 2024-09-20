@@ -147,6 +147,7 @@ def show_statistics():
         st.write("Pas encore de données pour les statistiques.")
 
 
+
 def main():
     st.title("🇩🇪 Outil de révision des mots en allemand avec répétition espacée")
 
