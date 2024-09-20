@@ -94,13 +94,16 @@ def show_statistics():
     session_duration = time.time() - st.session_state.session_start_time - st.session_state.sleep_time
     avg_time_per_question = session_duration / (st.session_state.correct + st.session_state.incorrect) if (st.session_state.correct + st.session_state.incorrect) > 0 else 0
 
+    # Pourcentage de bonnes réponses
     total_questions = st.session_state.correct + st.session_state.incorrect
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
     if st.session_state.correct + st.session_state.incorrect > 0:
+        # Afficher les statistiques générales
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
         st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
 
+        # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
@@ -112,34 +115,28 @@ def show_statistics():
             st.write("Aucune erreur enregistrée.")
 
         st.write("---\n")
-        
-        # Donut chart avec les couleurs du drapeau allemand
+        # Créer un donut chart pour les réponses correctes et incorrectes
         labels = 'Correct', 'Incorrect'
         sizes = [st.session_state.correct, st.session_state.incorrect]
         fig, ax = plt.subplots()
         fig.set_size_inches(4, 4)
-        colors = ['yellow', '#8B0000']  # Couleurs pour correct (noir) et incorrect (rouge)
-        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
-        ax.axis('equal')
+        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
+        ax.axis('equal')  # forme circulaire du donut
 
+        # Créer deux colonnes pour le donut et le wordcloud
         col1, col2 = st.columns(2)
 
+        # Afficher le donut chart dans la première colonne
         with col1:
             donut_chart = io.BytesIO()
             plt.savefig(donut_chart, format='png')
             donut_chart.seek(0)
             st.image(donut_chart)
 
-        # Wordcloud avec les couleurs du drapeau allemand
+        # Créer un word cloud et l'afficher dans la deuxième colonne
         if st.session_state.error_counts:
             word_freq = {word: count for word, count in sorted_errors[:10]}
-            
-            # Fonction pour colorier le word cloud en noir, rouge, jaune
-            colors_wordcloud = ['black', 'red', 'yellow']
-            def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
-                return random.choice(colors_wordcloud)
-
-            wordcloud = WordCloud(width=800, height=400, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_freq)
 
             with col2:
                 wordcloud_image = io.BytesIO()
@@ -148,7 +145,6 @@ def show_statistics():
                 st.image(wordcloud_image)
     else:
         st.write("Pas encore de données pour les statistiques.")
-
 
 
 
@@ -205,4 +201,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-    
