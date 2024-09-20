@@ -87,7 +87,7 @@ def revise_words(words_dict, word_scores):
         
 def show_statistics():
     """Affiche les statistiques de la session."""
-    with st.form():  # Encadrer tout le contenu dans un container
+    with st.form(key='stats_form'):  # Encadrer tout le contenu dans un container
         if st.session_state.session_start_time is None:
             st.write("Les statistiques seront disponibles après avoir commencé la révision.")
             return
