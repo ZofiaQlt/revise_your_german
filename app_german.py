@@ -7,6 +7,7 @@ import io
 from collections import defaultdict
 from wordcloud import WordCloud
 import numpy as np
+import unidecode
 
 # Charger les données depuis un fichier CSV
 @st.cache_data
@@ -46,8 +47,6 @@ def get_weighted_word(word_scores):
         weighted_list.extend([word] * score)
     return random.choice(weighted_list)
 
-import re
-import unidecode  # Ajoutez cette importation pour gérer les accents
 
 def normalize_text(text):
     """Supprime les accents d'une chaîne de caractères."""
