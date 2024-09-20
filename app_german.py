@@ -209,10 +209,10 @@ def main():
         # Ajoute ce CSS à la fin de ton code
 css = """
 <style>
-    [data-testid="stForm"]:nth-child(1) {
+    [data-testid="stForm"][key='stats_form'] {
         background: #ffffe0; /* Pour le formulaire des statistiques */
     }
-    [data-testid="stForm"]:nth-child(2) {
+    [data-testid="stForm"][key='my_form'] {
         background: white; /* Pour le formulaire de réponse */
     }
 </style>
