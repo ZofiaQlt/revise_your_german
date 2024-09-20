@@ -208,9 +208,6 @@ def main():
         if st.form_submit_button("Statistiques"):
             show_statistics()
 
-    # CSS spécifique pour le formulaire de statistiques (background jaune) en utilisant l'ID unique
-
-
     css="""
     <style>
         [data-testid="stats_form"] {
