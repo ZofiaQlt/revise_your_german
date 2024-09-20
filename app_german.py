@@ -203,9 +203,28 @@ def main():
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
     
-    with st.form(key='stats_form'):
+    # Ajout du style pour le fond légèrement jaune
+    st.markdown(
+        """
+        <style>
+        .stats-form {
+            background-color: #fff9c4;  /* Jaune clair */
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
+
+    with st.form(key='stats_form', clear_on_submit=True):
+        # Appliquer la classe CSS
+        st.markdown('<div class="stats-form">', unsafe_allow_html=True)
+
         if st.form_submit_button("Statistiques"):
             show_statistics()
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 
