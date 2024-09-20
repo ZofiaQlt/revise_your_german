@@ -5,5 +5,3 @@ time
 io
 collections
 numpy
-matplotlib
-wordcloud
