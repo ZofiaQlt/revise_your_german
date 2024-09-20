@@ -120,11 +120,11 @@ def show_statistics():
         sizes = [st.session_state.correct, st.session_state.incorrect]
         colors = ['#ebd61c', '#eb4528']  # Couleurs viridis '#1F9C92'
         fig, ax = plt.subplots()
-        fig.set_size_inches(6, 6)
+        fig.set_size_inches(8, 8)
         wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
         # Personnaliser la taille de la police
         for text in texts + autotexts:
-            text.set_fontsize(12)  # Ajuste la taille de la police selon tes besoins
+            text.set_fontsize(14)  # Ajuste la taille de la police selon tes besoins
         ax.axis('equal')  # forme circulaire du donut
 
         # Créer deux colonnes pour le donut et le wordcloud
