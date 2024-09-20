@@ -60,7 +60,7 @@ def revise_words(words_dict, word_scores):
         st.write(f"Quel est le mot français pour _'{st.session_state.current_word}'_ ?")
         correct_answer = french_translation
 
-    # Crée un formulaire pour gérer la soumission via "Enter" du clavier ou en en appuyant sur le bouton
+    # Crée un formulaire pour gérer la soumission via "Enter" du clavier ou en en appuyant sur le bouton de l'application
     with st.form(key='my_form', clear_on_submit=True):
         user_input = st.text_input("Votre réponse:", key="answer_input")
         submit_button = st.form_submit_button(label="Valider")
