@@ -103,9 +103,7 @@ def show_statistics():
         labels = 'Corrects', 'Incorrects'
         sizes = [st.session_state.correct, st.session_state.incorrect]
         fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140,
-                                          pctdistance=0.85, wedgeprops=dict(width=0.3))
-
+        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.2))
         ax.axis('equal')  # forme circulaire du donut
         
         # Afficher les statistiques
