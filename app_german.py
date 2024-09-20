@@ -113,60 +113,60 @@ def show_statistics():
     # Afficher les statistiques
     st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
     st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
+
+    # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
+    if st.session_state.error_counts:
+        sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
+        top_5_errors = sorted_errors[:5]
+        st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
+        for word, count in top_5_errors:
+            error_label = "erreur" if count == 1 else "erreurs"
+            st.write(f"- {word} : {count} {error_label}")
+    else:
+        st.write("Aucune erreur enregistrée.")
+
+    st.write("---\n")
+
+    # Créer un donut chart pour les réponses correctes et incorrectes
+    labels = 'Correct', 'Incorrect'
+    sizes = [st.session_state.correct, st.session_state.incorrect]
+    colors = ['#ebd61c', '#eb4528']
+    fig, ax = plt.subplots()
+    fig.set_size_inches(6, 6)
+    wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
     
-    # Le reste du code...
+    # Personnaliser la taille de la police
+    for text in texts + autotexts:
+        text.set_fontsize(10.5)  # Ajuste la taille de la police selon tes besoins
+    ax.axis('equal')  # forme circulaire du donut
 
+    # Créer deux colonnes pour le donut et le wordcloud
+    col1, col2 = st.columns(2)
 
-        # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
-        if st.session_state.error_counts:
-            sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
-            top_5_errors = sorted_errors[:5]
-            st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
-            for word, count in top_5_errors:
-                error_label = "erreur" if count == 1 else "erreurs"
-                st.write(f"- {word} : {count} {error_label}")
-        else:
-            st.write("Aucune erreur enregistrée.")
+    # Afficher le donut chart dans la première colonne
+    with col1:
+        donut_chart = io.BytesIO()
+        plt.savefig(donut_chart, format='png')
+        donut_chart.seek(0)
+        st.image(donut_chart)
 
-        st.write("---\n")
-        # Créer un donut chart pour les réponses correctes et incorrectes
-        labels = 'Correct', 'Incorrect'
-        sizes = [st.session_state.correct, st.session_state.incorrect]
-        colors = ['#ebd61c', '#eb4528']  # Couleurs viridis '#1F9C92'
-        fig, ax = plt.subplots()
-        fig.set_size_inches(6, 6)
-        wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
-        # Personnaliser la taille de la police
-        for text in texts + autotexts:
-            text.set_fontsize(10.5)  # Ajuste la taille de la police selon tes besoins
-        ax.axis('equal')  # forme circulaire du donut
+    # Créer un word cloud et l'afficher dans la deuxième colonne
+    if st.session_state.error_counts:
+        word_freq = {word: count for word, count in sorted_errors[:10]}
+        colors_wordcloud = ['black', '#ebd61c', '#eb4528']
+        def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+            return random.choice(colors_wordcloud)
 
-        # Créer deux colonnes pour le donut et le wordcloud
-        col1, col2 = st.columns(2)
+        wordcloud = WordCloud(width=800, height=750, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
 
-        # Afficher le donut chart dans la première colonne
-        with col1:
-            donut_chart = io.BytesIO()
-            plt.savefig(donut_chart, format='png')
-            donut_chart.seek(0)
-            st.image(donut_chart)
-
-        # Créer un word cloud et l'afficher dans la deuxième colonne
-        if st.session_state.error_counts:
-            word_freq = {word: count for word, count in sorted_errors[:10]}
-            colors_wordcloud = ['black', '#ebd61c', '#eb4528']
-            def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
-                return random.choice(colors_wordcloud)
-
-            wordcloud = WordCloud(width=800, height=750, background_color='white', color_func=color_func).generate_from_frequencies(word_freq)
-
-            with col2:
-                wordcloud_image = io.BytesIO()
-                wordcloud.to_image().save(wordcloud_image, format='png')
-                wordcloud_image.seek(0)
-                st.image(wordcloud_image)
+        with col2:
+            wordcloud_image = io.BytesIO()
+            wordcloud.to_image().save(wordcloud_image, format='png')
+            wordcloud_image.seek(0)
+            st.image(wordcloud_image)
     else:
         st.write("Pas encore de données pour les statistiques.")
+
 
 
 def main():
