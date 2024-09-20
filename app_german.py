@@ -208,18 +208,17 @@ def main():
         if st.form_submit_button("Statistiques"):
             show_statistics()
 
-    # CSS pour le formulaire de statistiques
-    st.markdown(
-        """
-        <style>
-            #stats_form {
-                background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
-                padding: 10px;
-                border-radius: 10px;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+# CSS pour le formulaire de statistiques
+    css = """
+    <style>
+        [data-testid="stForm"][key="stats_form"] {
+            background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+    """
+    st.write(css, unsafe_allow_html=True)
+    
 if __name__ == "__main__":
     main() 
