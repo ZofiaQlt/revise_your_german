@@ -103,7 +103,7 @@ def show_statistics():
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
         st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
 
-        # Afficher le top 5 des mots avec le plus grand nombre d'erreurs juste après les statistiques
+        # Afficher le top 5 des mots avec le plus grand nombre d'erreurs
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
@@ -115,7 +115,6 @@ def show_statistics():
             st.write("Aucune erreur enregistrée.")
 
         st.write("---\n")
-        # Placer le bloc contenant les deux colonnes (donut et wordcloud) tout en bas
         # Créer un donut chart pour les réponses correctes et incorrectes
         labels = 'Correct', 'Incorrect'
         sizes = [st.session_state.correct, st.session_state.incorrect]
@@ -124,7 +123,7 @@ def show_statistics():
         wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, wedgeprops=dict(width=0.3))
         ax.axis('equal')  # forme circulaire du donut
 
-        # Créer deux colonnes pour le donut et le wordcloud tout en bas
+        # Créer deux colonnes pour le donut et le wordcloud
         col1, col2 = st.columns(2)
 
         # Afficher le donut chart dans la première colonne
