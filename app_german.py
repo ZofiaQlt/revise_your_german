@@ -206,14 +206,19 @@ def main():
     with st.form(key='stats_form'):
         if st.form_submit_button("Statistiques"):
             show_statistics()
-        css="""
-        <style>
-            [data-testid="stForm"]:nth-child(1) {
-                background: #ffffe0;
-            }
-        </style>
-        """
-        st.write(css, unsafe_allow_html=True)
+        # Ajoute ce CSS à la fin de ton code
+css = """
+<style>
+    [data-testid="stForm"]:nth-child(1) {
+        background: #ffffe0; /* Pour le formulaire des statistiques */
+    }
+    [data-testid="stForm"]:nth-child(2) {
+        background: white; /* Pour le formulaire de réponse */
+    }
+</style>
+"""
+st.write(css, unsafe_allow_html=True)
+
     
 if __name__ == "__main__":
     main() 
