@@ -208,7 +208,7 @@ def main():
         """
         <style>
         .stats-form {
-            background-color: #fff9c4;  /* Jaune clair */;
+            background-color: #fff9c4;  /* Jaune clair */
         }
         </style>
         """, unsafe_allow_html=True
