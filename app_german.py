@@ -125,7 +125,7 @@ def show_statistics():
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
-            st.write("---\n__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
+            st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__")
             for word, count in top_5_errors:
                 error_label = "erreur" if count == 1 else "erreurs"
                 st.write(f"- {word} : {count} {error_label}")
