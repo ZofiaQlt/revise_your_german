@@ -2,6 +2,8 @@ import streamlit as st
 import random
 import time
 import pandas as pd
+import plotly.express as px
+import altair as alt
 import io
 from collections import defaultdict
 import numpy as np
@@ -82,7 +84,7 @@ def revise_words(words_dict, word_scores):
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
         st.rerun()  # Recharge la page pour afficher la nouvelle question
-        
+
 def show_statistics():
     """Affiche les statistiques de la session."""
     if st.session_state.session_start_time is None:
@@ -97,7 +99,17 @@ def show_statistics():
     correct_percentage = (st.session_state.correct / total_questions * 100) if total_questions > 0 else 0
 
     if st.session_state.correct + st.session_state.incorrect > 0:
-        
+        # Créer un donut chart avec Plotly pour les réponses correctes et incorrectes
+        labels = ['Corrects', 'Incorrects']
+        sizes = [st.session_state.correct, st.session_state.incorrect]
+        fig = px.pie(
+            values=sizes, 
+            names=labels, 
+            hole=0.3, 
+            title="Répartition des réponses correctes/incorrectes",
+        )
+        st.plotly_chart(fig)
+
         # Afficher les statistiques
         st.write(f"__Pourcentage de bonnes réponses :__ {correct_percentage:.1f}%")
         st.write(f"__Temps moyen par question :__ {avg_time_per_question:.1f} secondes")
@@ -106,10 +118,25 @@ def show_statistics():
         if st.session_state.error_counts:
             sorted_errors = sorted(st.session_state.error_counts.items(), key=lambda x: x[1], reverse=True)
             top_5_errors = sorted_errors[:5]
-            st.write("__Top 5 des mots avec le plus grand nombre d'erreurs :__")
+            st.write("---\n__Top 5 des mots avec le plus grand nombre d'erreurs :__\n")
             for word, count in top_5_errors:
                 error_label = "erreur" if count == 1 else "erreurs"
                 st.write(f"- {word} : {count} {error_label}")
+
+            # Créer un graphique des fréquences des mots avec Altair pour remplacer le Word Cloud
+            word_freq = {word: count for word, count in sorted_errors[:10]}
+            data = pd.DataFrame(list(word_freq.items()), columns=['Mot', 'Fréquence'])
+
+            chart = alt.Chart(data).mark_bar().encode(
+                x='Mot',
+                y='Fréquence',
+                color='Mot'
+            ).properties(
+                title='Top 10 des mots les plus fréquents en erreurs'
+            )
+
+            st.altair_chart(chart, use_container_width=True)
+
         else:
             st.write("Aucune erreur enregistrée.")
     else:
