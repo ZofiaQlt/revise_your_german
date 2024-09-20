@@ -46,6 +46,13 @@ def get_weighted_word(word_scores):
         weighted_list.extend([word] * score)
     return random.choice(weighted_list)
 
+import re
+import unidecode  # Ajoutez cette importation pour gérer les accents
+
+def normalize_text(text):
+    """Supprime les accents d'une chaîne de caractères."""
+    return unidecode.unidecode(text)
+
 def revise_words(words_dict, word_scores):
     # Révision du français vers l'allemand
     if st.session_state.revision_direction == 'french_to_german':
@@ -67,23 +74,35 @@ def revise_words(words_dict, word_scores):
 
     # Si le formulaire est soumis
     if submit_button:
+        normalized_user_input = normalize_text(user_input.strip().lower())
+        normalized_correct_answer = normalize_text(correct_answer.lower())
+
         if user_input.strip().lower() == correct_answer.lower():
             st.write("✅  Correct !\n")
             st.session_state.correct += 1
-            word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)  # Réduit le score pour diminuer la fréquence
-            st.session_state.sleep_time += 1  # Ajoute 1 seconde au temps de pause
-            time.sleep(1)  # Pause
+            word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)
+            st.session_state.sleep_time += 1
+            time.sleep(1)
+
+        elif normalized_user_input == normalized_correct_answer:
+            st.write(f"✅  Correct ! Mais tu as oublié l'accent. Le mot s'écrit _'{correct_answer}'_.\n")
+            st.session_state.correct += 1
+            word_scores[st.session_state.current_word] = max(1, word_scores[st.session_state.current_word] - 1)
+            st.session_state.sleep_time += 1
+            time.sleep(1)
+
         else:
             st.write(f"❌  Faux ! La bonne réponse est _'{correct_answer}'_.\n")
             st.session_state.incorrect += 1
-            word_scores[st.session_state.current_word] += 2  # Augmente le score pour augmenter la fréquence
-            st.session_state.error_counts[st.session_state.current_word] += 1  # Incrémentation du compteur d'erreurs
-            st.session_state.sleep_time += 1.75  # Ajoute des secondes au temps de pause
-            time.sleep(1.75)  # Pause
+            word_scores[st.session_state.current_word] += 2
+            st.session_state.error_counts[st.session_state.current_word] += 1
+            st.session_state.sleep_time += 1.75
+            time.sleep(1.75)
 
         # Passer à la question suivante
         st.session_state.current_word = get_weighted_word(word_scores)
-        st.rerun()  # Recharge la page pour afficher la nouvelle question
+        st.rerun()
+
         
 def show_statistics():
     """Affiche les statistiques de la session."""
