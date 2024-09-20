@@ -118,7 +118,7 @@ def show_statistics():
         sizes = [st.session_state.correct, st.session_state.incorrect]
         fig, ax = plt.subplots()
         fig.set_size_inches(4, 4)
-        colors = ['yellow', 'red']  # Couleurs pour correct (noir) et incorrect (rouge)
+        colors = ['yellow', '#8B0000']  # Couleurs pour correct (noir) et incorrect (rouge)
         wedges, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, pctdistance=0.85, colors=colors, wedgeprops=dict(width=0.3))
         ax.axis('equal')
 
