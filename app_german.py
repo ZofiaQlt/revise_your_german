@@ -202,21 +202,6 @@ def main():
         revise_words(words, st.session_state.word_scores)
 
     st.write(f"Score : {st.session_state.correct} corrects, {st.session_state.incorrect} incorrects")
-    
-    # Ajout du style pour le fond légèrement jaune
-    st.markdown(
-        """
-        <style>
-        .stats-form {
-            background-color: #fff9c4;  /* Jaune clair */
-            padding: 200px;
-            border-radius: 5px;
-            margin-top: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
 
     with st.form(key='stats_form', clear_on_submit=True):
         # Appliquer la classe CSS
