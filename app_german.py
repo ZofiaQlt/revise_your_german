@@ -211,7 +211,7 @@ def main():
 # CSS pour le formulaire de statistiques
     css = """
     <style>
-        [data-testid="stForm"][key="stats_form"] {
+        [data-testid="stForm"] {
             background: #ffffe0;  /* Fond jaune pour le formulaire des statistiques */
         }
     </style>
